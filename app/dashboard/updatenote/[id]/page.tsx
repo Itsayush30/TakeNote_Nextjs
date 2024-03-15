@@ -2,6 +2,8 @@
 
 import { useEffect, useState, ChangeEvent } from 'react';
 
+import { UPDATE_NOTE_API } from "../../../utlis/constants";
+
 interface Note {
   title: string;
   note: string;
@@ -24,7 +26,7 @@ const UpdateNote = () => {
       try {
         const id = getIdFromUrl(); // Extract id from URL
         if (!id) return;
-        const response = await fetch(`http://localhost:3300/notes/${id}`);
+        const response = await fetch(`${UPDATE_NOTE_API}/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch note');
         }

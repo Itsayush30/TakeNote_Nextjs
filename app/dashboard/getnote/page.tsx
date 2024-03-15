@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; 
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { GET_NOTES_API, DELETE_NOTES_API } from "../../utlis/constants";
 
 interface Note {
   _id: string;
@@ -15,19 +16,19 @@ interface Note {
 
 const Notes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
-  const router = useRouter(); 
+  const router = useRouter();
 
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const response = await fetch('http://localhost:3300/notes');
+        const response = await fetch(GET_NOTES_API);
         if (!response.ok) {
-          throw new Error('Failed to fetch notes');
+          throw new Error("Failed to fetch notes");
         }
         const data = await response.json();
         setNotes(data);
       } catch (error) {
-        console.error('Error:', error);
+        console.error("Error:", error);
       }
     };
 
@@ -36,17 +37,23 @@ const Notes = () => {
 
   const convertToIST = (createdAt: string) => {
     const date = new Date(createdAt);
-    
+
     const ISTOffset = 330 * 60 * 1000; // (5 hours 30 minutes)
     const ISTTime = new Date(date.getTime() + ISTOffset);
-    
+
     // dd/mm/yyyy
-    const formattedDate = `${ISTTime.getDate().toString().padStart(2, '0')}/${(ISTTime.getMonth() + 1).toString().padStart(2, '0')}/${ISTTime.getFullYear()}`;
-    
-    const formattedTime = ISTTime.toLocaleTimeString('en-IN', { hour12: false });
-    
+    const formattedDate = `${ISTTime.getDate().toString().padStart(2, "0")}/${(
+      ISTTime.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}/${ISTTime.getFullYear()}`;
+
+    const formattedTime = ISTTime.toLocaleTimeString("en-IN", {
+      hour12: false,
+    });
+
     return `${formattedDate} ${formattedTime}`;
-  }
+  };
 
   const handleUpdateNote = (id: string) => {
     // Navigate to the update note page with dynamic ID
@@ -55,16 +62,17 @@ const Notes = () => {
 
   const handleDeleteNote = async (id: string) => {
     try {
-      const response = await fetch(`http://localhost:3300/notes/${id}`, {
-        method: 'DELETE'
+      const response = await fetch(`${DELETE_NOTES_API}/${id}`, {
+        method: "DELETE",
       });
+    
       if (!response.ok) {
-        throw new Error('Failed to delete note');
+        throw new Error("Failed to delete note");
       }
       // Remove deleted note
-      setNotes(notes.filter(note => note._id !== id));
+      setNotes(notes.filter((note) => note._id !== id));
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
@@ -79,10 +87,22 @@ const Notes = () => {
             <p className="text-gray-600">Author: {note.author}</p>
             <p className="text-gray-600">Special Note: {note.specialnote}</p>
             <p className="text-gray-600">Mood: {note.mood}</p>
-            <p className="text-gray-600">Created At: {convertToIST(note.createdAt)}</p>
+            <p className="text-gray-600">
+              Created At: {convertToIST(note.createdAt)}
+            </p>
             <div className="flex justify-between mt-4">
-              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleUpdateNote(note._id)}>Update</button>
-              <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleDeleteNote(note._id)}>Delete</button>
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={() => handleUpdateNote(note._id)}
+              >
+                Update
+              </button>
+              <button
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                onClick={() => handleDeleteNote(note._id)}
+              >
+                Delete
+              </button>
             </div>
           </div>
         ))}

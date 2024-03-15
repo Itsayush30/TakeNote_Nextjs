@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import React, { useState, FormEvent, ChangeEvent } from 'react';
-
+import React, { useState, FormEvent, ChangeEvent } from "react";
+import { CREATE_NOTE_API } from "../../utlis/constants";
 interface Note {
   author: string;
   title: string;
@@ -11,27 +11,27 @@ interface Note {
 }
 
 const AddNote: React.FC = () => {
-  const [author, setAuthor] = useState<string>('');
-  const [title, setTitle] = useState<string>('');
-  const [note, setNote] = useState<string>('');
-  const [specialNote, setSpecialNote] = useState<string>('');
-  const [mood, setMood] = useState<string>('');
-  const [message, setMessage] = useState<string>('');
+  const [author, setAuthor] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [note, setNote] = useState<string>("");
+  const [specialNote, setSpecialNote] = useState<string>("");
+  const [mood, setMood] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const token: string | null = localStorage.getItem('token'); // Get token from localStorage
+      const token: string | null = localStorage.getItem("token"); // Get token from localStorage
       if (!token) {
-        throw new Error('Token not found in localStorage');
+        throw new Error("Token not found in localStorage");
       }
 
-      const response = await fetch('http://localhost:3300/notes/new', {
-        method: 'POST',
+      const response = await fetch(CREATE_NOTE_API, {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ author, title, note, specialNote, mood }),
       });
@@ -39,32 +39,34 @@ const AddNote: React.FC = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage('Note added successfully!');
+        setMessage("Note added successfully!");
       } else {
-        setMessage(data.message || 'Failed to add note');
+        setMessage(data.message || "Failed to add note");
       }
     } catch (error) {
-      console.error('Error:', error);
-      setMessage('An error occurred while processing your request');
+      console.error("Error:", error);
+      setMessage("An error occurred while processing your request");
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     switch (name) {
-      case 'author':
+      case "author":
         setAuthor(value);
         break;
-      case 'title':
+      case "title":
         setTitle(value);
         break;
-      case 'note':
+      case "note":
         setNote(value);
         break;
-      case 'specialNote':
+      case "specialNote":
         setSpecialNote(value);
         break;
-      case 'mood':
+      case "mood":
         setMood(value);
         break;
       default:
@@ -76,12 +78,16 @@ const AddNote: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Create Note</h2>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Create Note
+          </h2>
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
-              <label htmlFor="author" className="sr-only">Author</label>
+              <label htmlFor="author" className="sr-only">
+                Author
+              </label>
               <input
                 id="author"
                 name="author"
@@ -94,7 +100,9 @@ const AddNote: React.FC = () => {
               />
             </div>
             <div>
-              <label htmlFor="title" className="sr-only">Title</label>
+              <label htmlFor="title" className="sr-only">
+                Title
+              </label>
               <input
                 id="title"
                 name="title"
@@ -107,7 +115,9 @@ const AddNote: React.FC = () => {
               />
             </div>
             <div>
-              <label htmlFor="note" className="sr-only">Note</label>
+              <label htmlFor="note" className="sr-only">
+                Note
+              </label>
               <textarea
                 id="note"
                 name="note"
@@ -120,7 +130,9 @@ const AddNote: React.FC = () => {
               />
             </div>
             <div>
-              <label htmlFor="specialNote" className="sr-only">Special Note</label>
+              <label htmlFor="specialNote" className="sr-only">
+                Special Note
+              </label>
               <input
                 id="specialNote"
                 name="specialNote"
@@ -133,7 +145,9 @@ const AddNote: React.FC = () => {
               />
             </div>
             <div>
-              <label htmlFor="mood" className="sr-only">Mood</label>
+              <label htmlFor="mood" className="sr-only">
+                Mood
+              </label>
               <input
                 id="mood"
                 name="mood"

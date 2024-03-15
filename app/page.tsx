@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { SIGNUP_API } from "./utlis/constants";
+
 
 export default function Home() {
   const [name, setName] = useState("");
@@ -14,7 +16,7 @@ export default function Home() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3300/auth/signup", {
+      const response = await fetch(SIGNUP_API, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

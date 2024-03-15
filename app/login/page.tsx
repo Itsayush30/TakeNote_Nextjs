@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, FormEvent, ChangeEvent } from 'react';
+import { LOGIN_API } from '../utlis/constants';
 import { useRouter } from 'next/navigation'; // 
 const Login: React.FC = () => {
   const [name, setName] = useState<string>('');
@@ -13,7 +14,7 @@ const Login: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3300/auth/login', {
+      const response = await fetch(LOGIN_API, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
