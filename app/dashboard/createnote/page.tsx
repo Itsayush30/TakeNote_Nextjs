@@ -1,20 +1,28 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, FormEvent, ChangeEvent } from 'react';
 
-const AddNote = () => {
-  const [author, setAuthor] = useState('');
-  const [title, setTitle] = useState('');
-  const [note, setNote] = useState('');
-  const [specialNote, setSpecialNote] = useState('');
-  const [mood, setMood] = useState('');
-  const [message, setMessage] = useState('');
+interface Note {
+  author: string;
+  title: string;
+  note: string;
+  specialNote: string;
+  mood: string;
+}
 
-  const handleSubmit = async (e) => {
+const AddNote: React.FC = () => {
+  const [author, setAuthor] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
+  const [note, setNote] = useState<string>('');
+  const [specialNote, setSpecialNote] = useState<string>('');
+  const [mood, setMood] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      const token = localStorage.getItem('token'); // Get token from localStorage
+      const token: string | null = localStorage.getItem('token'); // Get token from localStorage
       if (!token) {
         throw new Error('Token not found in localStorage');
       }
@@ -23,15 +31,16 @@ const AddNote = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, 
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ author, title, note, specialNote, mood }),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
         setMessage('Note added successfully!');
       } else {
-        const data = await response.json();
         setMessage(data.message || 'Failed to add note');
       }
     } catch (error) {
@@ -40,11 +49,34 @@ const AddNote = () => {
     }
   };
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case 'author':
+        setAuthor(value);
+        break;
+      case 'title':
+        setTitle(value);
+        break;
+      case 'note':
+        setNote(value);
+        break;
+      case 'specialNote':
+        setSpecialNote(value);
+        break;
+      case 'mood':
+        setMood(value);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Add Note</h2>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Create Note</h2>
         </div>
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm -space-y-px">
@@ -58,7 +90,7 @@ const AddNote = () => {
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 placeholder="Author"
                 value={author}
-                onChange={(e) => setAuthor(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -71,7 +103,7 @@ const AddNote = () => {
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 placeholder="Title"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -79,13 +111,13 @@ const AddNote = () => {
               <textarea
                 id="note"
                 name="note"
-                rows="3"
+                rows={3}
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 placeholder="Note"
                 value={note}
-                onChange={(e) => setNote(e.target.value)}
-              ></textarea>
+                onChange={handleChange}
+              />
             </div>
             <div>
               <label htmlFor="specialNote" className="sr-only">Special Note</label>
@@ -97,7 +129,7 @@ const AddNote = () => {
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 placeholder="Special Note"
                 value={specialNote}
-                onChange={(e) => setSpecialNote(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -110,7 +142,7 @@ const AddNote = () => {
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 placeholder="Mood (Happy, Sad, Angry, Lone)"
                 value={mood}
-                onChange={(e) => setMood(e.target.value)}
+                onChange={handleChange}
               />
             </div>
           </div>

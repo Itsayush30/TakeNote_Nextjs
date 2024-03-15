@@ -1,9 +1,17 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
+
+interface Note {
+  title: string;
+  note: string;
+  author: string;
+  specialnote: string;
+  mood: string;
+}
 
 const UpdateNote = () => {
-  const [note, setNote] = useState({
+  const [note, setNote] = useState<Note>({
     title: '',
     note: '',
     author: '',
@@ -20,7 +28,7 @@ const UpdateNote = () => {
         if (!response.ok) {
           throw new Error('Failed to fetch note');
         }
-        const data = await response.json();
+        const data: Note = await response.json();
         setNote(data);
       } catch (error) {
         console.error('Error:', error);
@@ -38,7 +46,7 @@ const UpdateNote = () => {
 
   const handleUpdateNote = async () => {
     try {
-      const id = getIdFromUrl(); 
+      const id = getIdFromUrl();
       if (!id) return;
       const response = await fetch(`http://localhost:3300/notes/${id}`, {
         method: 'PUT',
@@ -50,13 +58,12 @@ const UpdateNote = () => {
       if (!response.ok) {
         throw new Error('Failed to update note');
       }
-      
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setNote(prevNote => ({
       ...prevNote,

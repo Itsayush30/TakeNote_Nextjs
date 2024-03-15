@@ -11,7 +11,7 @@ This is a frontend application built with Next.js for creating and managing note
 
 git clone https://github.com/Itsayush30/TakeNote_Nextjs.git
 
-2. Navigate to the project directory:  `cd takenotefe`
+2. Navigate to the project directory:  `cd TakeNote_Nextjs`
 
 3. Install dependencies: `npm install`
 

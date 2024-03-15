@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+
 export default function Home() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -9,7 +10,7 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -20,7 +21,7 @@ export default function Home() {
         },
         body: JSON.stringify({ name, email, password }),
         mode: "cors", //CORS mode
-        credentials: "include", 
+        credentials: "include",
       });
 
       const data = await response.json();
@@ -42,7 +43,10 @@ export default function Home() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h1 className="text-center text-4xl  text-black font-extralight">
+            TakeNote
+          </h1>
+          <h2 className="mt-6 text-center text-2xl font-extrabold text-gray-900">
             Sign up
           </h2>
         </div>

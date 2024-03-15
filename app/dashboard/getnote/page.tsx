@@ -1,7 +1,8 @@
-'use client'
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; 
+
 interface Note {
   _id: string;
   title: string;
@@ -68,21 +69,24 @@ const Notes = () => {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-4 p-4">
-      {notes.map((note) => (
-        <div key={note._id} className="bg-gray-200 p-4 rounded-md shadow-md">
-          <h2 className="text-lg font-bold">{note.title}</h2>
-          <p className="text-gray-600">{note.note}</p>
-          <p className="text-gray-600">Author: {note.author}</p>
-          <p className="text-gray-600">Special Note: {note.specialnote}</p>
-          <p className="text-gray-600">Mood: {note.mood}</p>
-          <p className="text-gray-600">Created At: {convertToIST(note.createdAt)}</p>
-          <div className="flex justify-between mt-4">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleUpdateNote(note._id)}>Update</button>
-            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleDeleteNote(note._id)}>Delete</button>
+    <div>
+      <h1 className="my-4 text-2xl font-bold text-center mb-8">Saved Notes</h1>
+      <div className="grid grid-cols-3 gap-4 p-4">
+        {notes.map((note) => (
+          <div key={note._id} className="bg-gray-200 p-4 rounded-md shadow-md">
+            <h2 className="text-lg font-bold">{note.title}</h2>
+            <p className="text-gray-600">{note.note}</p>
+            <p className="text-gray-600">Author: {note.author}</p>
+            <p className="text-gray-600">Special Note: {note.specialnote}</p>
+            <p className="text-gray-600">Mood: {note.mood}</p>
+            <p className="text-gray-600">Created At: {convertToIST(note.createdAt)}</p>
+            <div className="flex justify-between mt-4">
+              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleUpdateNote(note._id)}>Update</button>
+              <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleDeleteNote(note._id)}>Delete</button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };
