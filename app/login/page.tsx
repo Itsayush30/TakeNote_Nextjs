@@ -1,11 +1,14 @@
 'use client'
+
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter from next/router
 
 const Login = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const router = useRouter(); // Initialize useRouter
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,15 +22,20 @@ const Login = () => {
         body: JSON.stringify({ name, email, password }),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
+        localStorage.setItem('token', data.token); // Store token in localStorage
         setMessage('Login successful!');
+        // Navigate to dashboard on successful login
+        router.push('/dashboard');
       } else {
-        const data = await response.json();
         setMessage(data.message || 'Login failed');
       }
     } catch (error) {
       console.error('Error:', error);
       setMessage('An error occurred while processing your request');
+      
     }
   };
 

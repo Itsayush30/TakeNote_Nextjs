@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
-
+import { useRouter } from "next/navigation";
 export default function Home() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -18,14 +19,16 @@ export default function Home() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ name, email, password }),
-        mode: "cors", // Set CORS mode
-        credentials: "include", // Include credentials (cookies, authorization headers, etc.)
+        mode: "cors", //CORS mode
+        credentials: "include", 
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setMessage("User registered successfully!");
+        // Navigate to login page on successful signup
+        router.push("/login");
       } else {
         setMessage(data.message || "Failed to register user");
       }

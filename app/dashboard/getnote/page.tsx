@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-
+import { useRouter } from 'next/navigation'; 
 interface Note {
   _id: string;
   title: string;
@@ -14,6 +14,7 @@ interface Note {
 
 const Notes = () => {
   const [notes, setNotes] = useState<Note[]>([]);
+  const router = useRouter(); 
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -38,7 +39,7 @@ const Notes = () => {
     const ISTOffset = 330 * 60 * 1000; // (5 hours 30 minutes)
     const ISTTime = new Date(date.getTime() + ISTOffset);
     
-    // date as dd/mm/yyyy
+    // dd/mm/yyyy
     const formattedDate = `${ISTTime.getDate().toString().padStart(2, '0')}/${(ISTTime.getMonth() + 1).toString().padStart(2, '0')}/${ISTTime.getFullYear()}`;
     
     const formattedTime = ISTTime.toLocaleTimeString('en-IN', { hour12: false });
@@ -47,8 +48,8 @@ const Notes = () => {
   }
 
   const handleUpdateNote = (id: string) => {
-    //  update logic 
-    console.log("Update note with ID:", id);
+    // Navigate to the update note page with dynamic ID
+    router.push(`/dashboard/updatenote/${id}`);
   };
 
   const handleDeleteNote = async (id: string) => {

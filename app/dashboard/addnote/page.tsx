@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 
 const AddNote = () => {
+  const [author, setAuthor] = useState('');
   const [title, setTitle] = useState('');
   const [note, setNote] = useState('');
-  const [author, setAuthor] = useState('');
   const [specialNote, setSpecialNote] = useState('');
   const [mood, setMood] = useState('');
   const [message, setMessage] = useState('');
@@ -14,12 +14,18 @@ const AddNote = () => {
     e.preventDefault();
 
     try {
+      const token = localStorage.getItem('token'); // Get token from localStorage
+      if (!token) {
+        throw new Error('Token not found in localStorage');
+      }
+
       const response = await fetch('http://localhost:3300/notes/new', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, 
         },
-        body: JSON.stringify({ title, note, author, specialNote, mood }),
+        body: JSON.stringify({ author, title, note, specialNote, mood }),
       });
 
       if (response.ok) {
@@ -43,13 +49,26 @@ const AddNote = () => {
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
+              <label htmlFor="author" className="sr-only">Author</label>
+              <input
+                id="author"
+                name="author"
+                type="text"
+                required
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                placeholder="Author"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+              />
+            </div>
+            <div>
               <label htmlFor="title" className="sr-only">Title</label>
               <input
                 id="title"
                 name="title"
                 type="text"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 placeholder="Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -67,19 +86,6 @@ const AddNote = () => {
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
               ></textarea>
-            </div>
-            <div>
-              <label htmlFor="author" className="sr-only">Author</label>
-              <input
-                id="author"
-                name="author"
-                type="text"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Author"
-                value={author}
-                onChange={(e) => setAuthor(e.target.value)}
-              />
             </div>
             <div>
               <label htmlFor="specialNote" className="sr-only">Special Note</label>
@@ -102,7 +108,7 @@ const AddNote = () => {
                 type="text"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                placeholder="Mood"
+                placeholder="Mood (Happy, Sad, Angry, Lone)"
                 value={mood}
                 onChange={(e) => setMood(e.target.value)}
               />
