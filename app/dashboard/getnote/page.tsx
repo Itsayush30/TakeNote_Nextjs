@@ -22,7 +22,6 @@ const Notes = () => {
     const fetchNotes = async () => {
       try {
         const token = window.localStorage.getItem("token") as string;
-        console.log(token);
         const response = await fetch(GET_NOTES_API, {
           headers: {
             // Added token as a Bearer token
