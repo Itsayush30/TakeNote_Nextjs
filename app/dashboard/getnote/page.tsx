@@ -21,7 +21,15 @@ const Notes = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const response = await fetch(GET_NOTES_API);
+        const token = window.localStorage.getItem("token") as string;
+        console.log(token);
+        const response = await fetch(GET_NOTES_API, {
+          headers: {
+            // Added token as a Bearer token
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
         if (!response.ok) {
           throw new Error("Failed to fetch notes");
         }
@@ -62,10 +70,12 @@ const Notes = () => {
 
   const handleDeleteNote = async (id: string) => {
     try {
+      const token = window.localStorage.getItem("token") as string; // Get token from localStorage
+
       const response = await fetch(`${DELETE_NOTES_API}/${id}`, {
         method: "DELETE",
       });
-    
+
       if (!response.ok) {
         throw new Error("Failed to delete note");
       }

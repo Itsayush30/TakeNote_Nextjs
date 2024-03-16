@@ -1,7 +1,8 @@
-"use client";
+'use client'
 
 import React, { useState, FormEvent, ChangeEvent } from "react";
 import { CREATE_NOTE_API } from "../../utlis/constants";
+
 interface Note {
   author: string;
   title: string;
@@ -40,6 +41,12 @@ const AddNote: React.FC = () => {
 
       if (response.ok) {
         setMessage("Note added successfully!");
+        // Clear form on successful submission
+        setAuthor("");
+        setTitle("");
+        setNote("");
+        setSpecialNote("");
+        setMood("");
       } else {
         setMessage(data.message || "Failed to add note");
       }
@@ -170,7 +177,7 @@ const AddNote: React.FC = () => {
           </div>
         </form>
         {message && (
-          <p className="mt-2 text-center text-sm text-red-600" role="alert">
+          <p className="mt-2 text-center text-sm text-green-600" role="alert">
             {message}
           </p>
         )}

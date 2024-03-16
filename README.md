@@ -52,7 +52,7 @@ Follow the prompts to deploy the project. Vercel will provide you with a unique 
 6. Autoprefixer: PostCSS plugin to parse CSS and add vendor prefixes.
 
 
-
+NOTE - To prevent CORS (Cross-Origin Resource Sharing) errors, make sure you are using `localhost:3000`. 
 
 
 
